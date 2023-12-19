@@ -7,7 +7,8 @@ export interface UserToken {
 
 export interface User {
     username: string,
-    password: string
+    password: string,
+    token: string
 }
 
 export interface UserSchema extends User, Schema {};
