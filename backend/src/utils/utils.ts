@@ -2,7 +2,11 @@ import jwt, { Jwt } from 'jsonwebtoken';
 import { UserToken } from './types';
 
 export const generateUserJWTToken = (data:UserToken) => {
-    return jwt.sign(data, "shhh", {
-        expiresIn: "10h"
-    })
+    if(process.env.JWT_SECRET){
+        return jwt.sign(data, process.env.JWT_SECRET, {
+            expiresIn: "10h"
+        })
+    }else{
+        throw new Error("Invalid token salt.");
+    }
 }
