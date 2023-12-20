@@ -9,5 +9,5 @@ export const userSchema = new mongoose.Schema<UserSchema>({
 )
 
 export const userModel = mongoose.model<UserSchema>("Users", userSchema);
-
+userModel.createIndexes(); 
 export default userModel;

@@ -1,32 +1,28 @@
-import { Request, Response } from "express"
+import { Request, Response } from "express";
 import { generateUserJWTToken } from "../utils/utils";
 import userModel from "../models/userModel";
-import asyncHandler from 'express-async-handler';
+import asyncHandler from "express-async-handler";
 
-export const registerUser = asyncHandler( async (req:Request, res:Response) => {
+export const registerUser = asyncHandler(
+  async (req: Request, res: Response) => {
     const { username, password } = req.body;
-    if(username && password){
-        const token = generateUserJWTToken( { username, password } );
+    const token = generateUserJWTToken({ username, password });
 
-        const user = await userModel.create({
-            username,
-            password,
-            token
-        });
+    const user = await userModel.create({
+      username,
+      password,
+      token,
+    });
 
-        res.status(200).json({
-            success: true,
-            user
-        })
-    }else{
-        res.statusCode = 400;
-        throw new Error("All fields are required (username, password)");
-    }
-});
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  }
+);
 
-
-export const loginUser = (req:Request, res:Response) => {
-    throw new Error("hi");
-    res.status(200);
-    res.json(req.body.user);
-} 
+export const loginUser = (req: Request, res: Response) => {
+  throw new Error("hi");
+  res.status(200);
+  res.json(req.body.user);
+};

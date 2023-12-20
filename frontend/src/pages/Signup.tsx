@@ -1,56 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { Container, Card, Form, Stack, Button } from "react-bootstrap";
-import { sign } from "crypto";
+import { signupUser } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+
+import StdAlert from "../components/StdAlert";
+
 interface signupForm {
-  Fullname: string;
-  email: string;
-  username: string;
-  password: string;
+  username: string,
+  password: string,
 }
 export default function Signup() {
+  const dispatch = useAppDispatch();
+  const authState = useAppSelector(state => state.auth);
+  const navigate = useNavigate();
   const initialeSignupForm: signupForm = {
-    Fullname: "",
-    email: "",
     username: "",
     password: "",
   };
   const [signupForm, setSignupForm] = useState(initialeSignupForm);
+  const submitSignupForm = () => {
+    if(signupForm.username.trim() == "" || signupForm.password.trim() == ''){
+      return alert("All fields are required!");
+    }
+    
+    dispatch(signupUser(signupForm));
+  }
+  useEffect(() => {
+      if(authState.user){
+        navigate('/home');
+      }
 
-//   useEffect(() => {
-//       console.log(signupForm)
-//   }, [signupForm])
+  }, [authState, navigate])
   return (
     <div>
+      { authState.isError && <StdAlert message={authState.message} type="danger"/> }
+      { authState.isSuccess && <StdAlert message={authState.message} type="success"/> }
+
       <Container
         className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
+        style={{ height: "100vh" }} >
+        
         <Card style={{width: "30%"}}>
           <Card.Header>
             <h2>Signup</h2>
           </Card.Header>
 
           <Card.Body>
-            <Form.Group>
-              <Form.Label>Fullname</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Your fullname"
-                value={signupForm.Fullname}
-                onChange={(e) => setSignupForm({...signupForm, Fullname: e.target.value})}
-              ></Form.Control>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Your email"
-                value={signupForm.email}
-                onChange={(e) => setSignupForm({...signupForm, email: e.target.value})}
-              ></Form.Control>
-            </Form.Group>
 
             <Form.Group>
               <Form.Label>Username</Form.Label>
@@ -76,10 +72,8 @@ export default function Signup() {
 
           <Card.Footer>
             <Stack direction="horizontal" gap={3}>
-              <Button variant="success">Signup</Button>
-              <Link to="/login">
-                <Button variant="">Login?</Button>
-              </Link>
+              <Button variant="success" onClick={() => { submitSignupForm() }}>Signup</Button>
+              <Link to="/login"> <Button variant="">Login?</Button> </Link>
             </Stack>
           </Card.Footer>
         </Card>

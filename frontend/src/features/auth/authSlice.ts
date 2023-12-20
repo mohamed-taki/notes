@@ -1,6 +1,7 @@
 import { createAsyncThunk, createAction, createSlice, ActionCreator, AsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { authSliceInterface } from "../../helpers/types";
+import { User, authSliceInterface } from "../../helpers/types";
 import { RootState } from "../../app/store";
+import { doSignupUser } from "./authService";
 
 // const storedUser = localStorage.getItem('user');
 // const user = storedUser ? JSON.parse(storedUser) : null;
@@ -17,7 +18,15 @@ export const loginUser = createAsyncThunk(
     'auth/login', 
     async (loginInfo: {username: string, password: string}, thunkAPI) => {
         return loginInfo;
-    })
+    }
+)
+
+export const signupUser = createAsyncThunk(
+    'auth/signup',
+    async (signupInfo:User) => {
+        const signupRes = await doSignupUser(signupInfo);
+    }
+)
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -33,6 +42,13 @@ export const authSlice = createSlice({
     extraReducers: (builder) =>{
         builder.addCase(loginUser.fulfilled, (state, action) => {
             state.user = action.payload;
+        })
+        builder.addCase(signupUser.pending, (state, action) => {
+            state.isLoading = true;
+        })
+        builder.addCase(signupUser.fulfilled, (state, action) => {
+            state.user = action.payload.user
+            // state.isSuccess = true;
         })
     }
 })

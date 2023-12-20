@@ -1,6 +1,6 @@
 import React, { useDebugValue, useEffect, useState } from "react";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
@@ -9,9 +9,17 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const authState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  
+
+  useEffect(() => {
+    if (authState.user) {
+      navigate("/home");
+    }
+  }, [authState, navigate]);
+
   return (
     <div>
       <Container
@@ -47,14 +55,10 @@ export default function Login() {
 
           <Card.Footer>
             <Stack direction="horizontal" gap={3}>
-                <Button variant="primary">
-                    Login
-                </Button>
-                <Link to="/signup">
-                  <Button variant="">
-                      Signup?
-                  </Button>
-                </Link>
+              <Button variant="primary">Login</Button>
+              <Link to="/signup">
+                <Button variant="">Signup?</Button>
+              </Link>
             </Stack>
           </Card.Footer>
         </Card>
