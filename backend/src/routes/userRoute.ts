@@ -5,6 +5,6 @@ import { checkMissingFields } from "../middleware/fieldsMiddleware";
 const userRouter = Router();
 
 userRouter.post("/signup", checkMissingFields(["username", "password"]), registerUser);
-userRouter.post("/login", checkForUserTokenExist, loginUser);
+userRouter.post("/login", checkMissingFields(["username", "password"]), loginUser);
 
 export default userRouter;

@@ -1,18 +1,22 @@
-import React, { useDebugValue, useEffect, useState } from "react";
+import React, { ChangeEvent, useDebugValue, useEffect, useState } from "react";
 import { Button, Card, Container, Form, Stack } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { useDispatch } from "react-redux";
 import { loginUser } from "../features/auth/authSlice";
+import StdAlert from "../components/StdAlert";
+import { stdFormStatesOnChange } from "../helpers/types";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginForm, setLoginForm] = useState({username: '', password: ''});
 
   const navigate = useNavigate();
 
   const authState = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
+  const login = () => {
+    dispatch(loginUser(loginForm));
+  }
 
   useEffect(() => {
     if (authState.user) {
@@ -22,6 +26,10 @@ export default function Login() {
 
   return (
     <div>
+      {authState.isError && (
+        <StdAlert message={authState.message} type="danger" />
+      )}
+
       <Container
         className="d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
@@ -36,8 +44,9 @@ export default function Login() {
               <Form.Label>Username</Form.Label>
               <Form.Control
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={loginForm.username}
+                name="username"
+                onChange={(e:ChangeEvent<HTMLInputElement>) => stdFormStatesOnChange(e, loginForm, setLoginForm)}
                 placeholder="Username"
               ></Form.Control>
             </Form.Group>
@@ -46,8 +55,9 @@ export default function Login() {
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="text"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={loginForm.password}
+                name="password"
+                onChange={(e:ChangeEvent<HTMLInputElement>) => stdFormStatesOnChange(e, loginForm, setLoginForm)}
                 placeholder="password"
               ></Form.Control>
             </Form.Group>
@@ -55,7 +65,7 @@ export default function Login() {
 
           <Card.Footer>
             <Stack direction="horizontal" gap={3}>
-              <Button variant="primary">Login</Button>
+              <Button variant="primary" onClick={login}>Login</Button>
               <Link to="/signup">
                 <Button variant="">Signup?</Button>
               </Link>

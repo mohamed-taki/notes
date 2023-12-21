@@ -11,7 +11,7 @@ export const checkMissingFields = (requiredFields : string[]) => {
         });
 
         if(missingFields.length > 0){
-            res.statusCode = 301;
+            res.status(301);
             throw new Error(`All fields are required! (${missingFields.join(", ")})`)
         }else{
             next();

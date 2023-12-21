@@ -2,27 +2,47 @@ import { Request, Response } from "express";
 import { generateUserJWTToken } from "../utils/utils";
 import userModel from "../models/userModel";
 import asyncHandler from "express-async-handler";
+import { Error } from "mongoose";
+import { ErrorDescription } from "mongodb";
+import { User, UserSchema } from "../utils/types";
 
 export const registerUser = asyncHandler(
   async (req: Request, res: Response) => {
     const { username, password } = req.body;
     const token = generateUserJWTToken({ username, password });
 
-    const user = await userModel.create({
-      username,
-      password,
-      token,
-    });
-
-    res.status(200).json({
-      success: true,
-      user,
-    });
+    try {
+      const user = await userModel.create({
+        username,
+        password,
+        token,
+      });
+  
+      res.status(200).json({
+        success: true,
+        user,
+      });
+      
+    } catch (error:any) {
+      res.status(404);  
+      throw error
+    }
+    
   }
 );
 
-export const loginUser = (req: Request, res: Response) => {
-  throw new Error("hi");
-  res.status(200);
-  res.json(req.body.user);
-};
+export const loginUser = asyncHandler( async (req: Request, res: Response) => {
+  const {username, password } = req.body;
+  const user:User | null = await userModel.findOne({username, password});
+
+  console.log(user);
+  if(user){
+    res.status(200).json({
+      success: true,
+      user
+    })
+  }else{
+    res.status(400);
+    throw new Error("Invalid credentials.")
+  }
+});

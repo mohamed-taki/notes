@@ -11,4 +11,5 @@ export interface User {
     token: string
 }
 
+export interface IUSer extends Document, User {};
 export interface UserSchema extends User, Schema {};

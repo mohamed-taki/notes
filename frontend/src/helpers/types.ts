@@ -1,3 +1,5 @@
+import React, { ChangeEvent } from "react"
+
 export interface authSliceInterface {
     user: any,
     isError: boolean,
@@ -16,4 +18,11 @@ export interface StdAlertProps{
     title?: string,
     message?: string,
     type: "danger" | "primary" | "secondary" |"success" |"danger" |"warning" |"info" |"light" |"dark"
+}
+
+export const stdFormStatesOnChange = (e:ChangeEvent<HTMLInputElement>, state:any , setState: any) => {
+    setState({
+        ...state,
+        [e.target.name] : e.target.value
+    })
 }
