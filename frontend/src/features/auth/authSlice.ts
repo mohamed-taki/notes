@@ -3,6 +3,7 @@ import { User, authSliceInterface } from "../../helpers/types";
 import { RootState } from "../../app/store";
 import { doLogin, doSignupUser } from "./authService";
 import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
 
 const storedUser = localStorage.getItem('user');
 const user = storedUser ? JSON.parse(storedUser) : null;
@@ -47,20 +48,25 @@ export const signupUser = createAsyncThunk(
     }
 )
 
-export const logoutUser = () => {
-    localStorage.removeItem('user');
-}
+// export const logoutMyUser = createAsyncThunk("auth/logout", () => {
+//     console.log(localStorage);
+//     return localStorage.removeItem('user');
+// })
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         reset: (state) => {
-            state.isLoading = false
-            state.isSuccess = false
-            state.isError = false
-            state.message = ''
-          },
+            state.isLoading = false;
+            state.isSuccess = false;
+            state.isError = false;
+            state.message = '';
+        },
+        logoutMyUser: (state) => {
+            localStorage.removeItem('user');
+            state.user = null;
+        }
     },
     extraReducers: (builder) =>{
         builder.addCase(signupUser.pending, (state, action) => {
@@ -88,8 +94,17 @@ export const authSlice = createSlice({
             state.message = String(action.payload);
             // state.isSuccess = true;
         })
+        
+        // ------------------------------------------
+        // builder.addCase(logoutMyUser.fulfilled, (state, action) => {
+        //     state.isError = false;
+        //     state.isLoading = false;
+        //     state.isSuccess = true;
+        //     state.message = "";
+        //     state.user = null;
+        // })
     }
 })
 
-export const { reset } = authSlice.actions
+export const { reset, logoutMyUser } = authSlice.actions
 export default authSlice.reducer

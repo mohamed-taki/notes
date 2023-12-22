@@ -1,34 +1,40 @@
-import React, { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { useNavigate } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
-import { logoutUser } from '../features/auth/authSlice';
-
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useNavigate } from "react-router-dom";
+import { Button, Container, Stack } from "react-bootstrap";
+import { logoutMyUser } from "../features/auth/authSlice";
+import AddNotes from "../components/AddNotes";
+import NotesList from "../components/NotesList";
 
 function Home() {
-    const authState = useAppSelector(state => state.auth);
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
+  const authState = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-    const logout = async () => {
-      await dispatch(logoutUser);
+  const logout = async () => {
+    dispatch(logoutMyUser());
+  };
+
+  useEffect(() => {
+    if (!authState.user) {
       navigate("/login");
     }
-    
-    useEffect(()=> {
-        if(!authState.user){
-            navigate('/login');
-        }
-    }, [authState, navigate, dispatch])
+  }, [authState, navigate, dispatch, localStorage]);
   return (
     <div>
-      This is notes page
 
-      <Button variant='danger' onClick={logout}>
-        Logout
-      </Button>
+      <Stack direction="horizontal" gap={2}>
+          <Button variant="danger" onClick={logout} className="">
+            Logout
+          </Button>
+
+          <Container>
+              <AddNotes />
+              <NotesList />
+          </Container>
+      </Stack>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

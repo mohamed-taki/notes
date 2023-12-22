@@ -26,3 +26,13 @@ export const stdFormStatesOnChange = (e:ChangeEvent<HTMLInputElement>, state:any
         [e.target.name] : e.target.value
     })
 }
+
+export interface Note {
+    content: string,
+    creationDate : string,
+    modificationDate ?: string,
+}
+
+export interface NoteProps {
+    note: Note
+}
