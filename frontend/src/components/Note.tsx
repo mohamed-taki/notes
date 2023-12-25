@@ -10,7 +10,7 @@ function Note({ note }: NoteProps) {
           <Button variant="info text-white py-0">x</Button>
         </Card.Header>
         <Card.Body>{note.content}</Card.Body>
-        <Card.Footer>{note.creationDate ? `Created: ${note.creationDate}` : `Updated: ${note.modificationDate}`}</Card.Footer>
+        <Card.Footer>{note.createdAt ? `Created: ${note.createdAt}` : `Updated: ${note.updatedAt}`}</Card.Footer>
       </Card>
     </div>
   );

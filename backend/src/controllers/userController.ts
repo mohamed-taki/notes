@@ -35,11 +35,12 @@ export const loginUser = asyncHandler( async (req: Request, res: Response) => {
   const {username, password } = req.body;
   const user:User | null = await userModel.findOne({username, password});
 
-  console.log(user);
   if(user){
+    user.token = generateUserJWTToken({username: user.username, password: user.password})
+    await userModel.updateOne({"_id":user._id}, {token: user.token});
     res.status(200).json({
       success: true,
-      user
+      user,
     })
   }else{
     res.status(400);

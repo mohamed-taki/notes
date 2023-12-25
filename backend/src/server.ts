@@ -7,6 +7,7 @@ import connectDB from "./config/db";
 
 import errorHandler from "./middleware/errorHandler";
 import userRouter from "./routes/userRoute";
+import notesRoute from "./routes/notesRoute";
 
 connectDB();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 app.use("/api/users", userRouter);
+app.use("/api/notes", notesRoute);
 
 app.use(errorHandler);
 

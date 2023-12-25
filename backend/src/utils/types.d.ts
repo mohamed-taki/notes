@@ -6,6 +6,7 @@ export interface UserToken {
 }
 
 export interface User {
+    _id ?: string,
     username: string,
     password: string,
     token: string
@@ -20,4 +21,4 @@ export interface Note {
     createdAt ?: string,
     updatedAt ?: string
 }
-export interface NoteSchema extends Document, Note {};
+export interface NoteSchema extends Note, Document {};
