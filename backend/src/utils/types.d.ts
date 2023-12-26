@@ -18,6 +18,7 @@ export interface UserSchema extends User, Schema {};
 export interface Note {
     content : string,
     user: ObjectId,
+    isUpdated ?: boolean,
     createdAt ?: string,
     updatedAt ?: string
 }

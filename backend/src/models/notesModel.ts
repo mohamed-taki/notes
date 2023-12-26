@@ -12,6 +12,9 @@ const noteSchema = new mongoose.Schema<NoteSchema>(
       required: true,
       ref: "User",
     },
+    isUpdated: {
+      type: Boolean,
+    }
   },
   {
     timestamps: true,

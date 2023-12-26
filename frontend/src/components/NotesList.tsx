@@ -14,9 +14,9 @@ function NotesList() {
   }, []);
 
   return (
-    <Container className="d-flex flex-wrap gap-2 justify-content-center col-12 text-white bg-success">
+    <Container className="d-flex flex-wrap gap-2 justify-content-center col-12 text-white">
       {notes.map((note) => {
-        return <Note note={note} />;
+        return <Note note={note} key={note._id}/>;
       })}
     </Container>
   );

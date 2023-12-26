@@ -20,7 +20,7 @@ export default function Signup() {
   };
   const [signupForm, setSignupForm] = useState(initialeSignupForm);
   const submitSignupForm = () => {
-    if(signupForm.username.trim() == "" || signupForm.password.trim() == ''){
+    if(signupForm.username.trim() === "" || signupForm.password.trim() === ''){
       return alert("All fields are required!");
     }
     

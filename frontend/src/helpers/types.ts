@@ -30,6 +30,7 @@ export const stdFormStatesOnChange = (e:ChangeEvent<HTMLInputElement>, state:any
 }
 
 export interface Note {
+    _id ?: string,
     content: string,
     user ?: User['_id'],
     createdAt ?: string, 

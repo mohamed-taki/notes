@@ -19,7 +19,7 @@ function Home() {
     if (!authState.user) {
       navigate("/login");
     }
-  }, [authState, navigate, dispatch, localStorage]);
+  }, [authState, navigate, dispatch]);
   return (
     <div>
 

@@ -16,7 +16,7 @@ export const addNote = asyncHandler(async (req: Request, res: Response) => {
   const { content, user } = req.body;
   
   if(user){
-      const newNote = await noteModel.create({ content, user: user._id});
+      const newNote = await noteModel.create({ content, user: user._id, isUpdated: false});
       if(newNote){
         res.status(200).json({
             success: true,
@@ -31,3 +31,15 @@ export const addNote = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("No user found");
   }
 });
+
+export const updateNote = asyncHandler(async(req: Request, res: Response) => {
+  try {
+    const note = await noteModel.updateOne({_id: req.body.note._id}, req.body.note);
+    res.status(200).json({
+      success: true,
+      note
+    })
+  } catch (error) {
+    throw new Error("Couldn't update this note!"); 
+  }
+})
