@@ -34,12 +34,12 @@ export const addNote = asyncHandler(async (req: Request, res: Response) => {
 
 export const updateNote = asyncHandler(async(req: Request, res: Response) => {
   try {
-    const note = await noteModel.updateOne({_id: req.body.note._id}, req.body.note);
+    const note = await noteModel.findOneAndUpdate({_id: req.body._id}, req.body, {new : true, runValidators: true});
     res.status(200).json({
       success: true,
       note
     })
-  } catch (error) {
-    throw new Error("Couldn't update this note!"); 
+  } catch (error: any) {
+    throw new Error(error); 
   }
 })

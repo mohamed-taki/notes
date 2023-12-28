@@ -33,6 +33,7 @@ export interface Note {
     _id ?: string,
     content: string,
     user ?: User['_id'],
+    isUpdated: boolean,
     createdAt ?: string, 
     updatedAt ?: string,
 }

@@ -47,3 +47,12 @@ export const loginUser = asyncHandler( async (req: Request, res: Response) => {
     throw new Error("Invalid credentials.")
   }
 });
+
+export const verifyTokenValidity = asyncHandler( async (req: Request, res: Response) => {
+  // the token middleware will already check the token validity
+  // this function is just for sending the confirmation response
+  res.status(200).json({
+    success: true,
+    user: req.body.user
+  })
+})

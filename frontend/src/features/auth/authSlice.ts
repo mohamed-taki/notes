@@ -1,15 +1,30 @@
 import { createAsyncThunk, createAction, createSlice, ActionCreator, AsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { User, authSliceInterface } from "../../helpers/types";
 import { RootState } from "../../app/store";
-import { doLogin, doSignupUser } from "./authService";
+import { checkIsUserTokenValid, doLogin, doSignupUser } from "./authService";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 
-const storedUser = localStorage.getItem('user');
-const user = storedUser ? JSON.parse(storedUser) : null;
+
+const localUser = localStorage.getItem("user");
+export const authUser = localUser ? JSON.parse(localUser) as User : null;
+
+export const checkUserToken = createAsyncThunk("auth/token", async (user: User | null, thunkAPI) => {
+    if(user){
+        try {
+            const userRes = await checkIsUserTokenValid(user.token);
+            localStorage.setItem("user", JSON.stringify(userRes.user))
+            return userRes.user;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }else{
+        return thunkAPI.rejectWithValue("Invalid Token!")
+    }
+})
 
 const initialState : authSliceInterface = {
-    user,
+    user: null,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -66,6 +81,13 @@ export const authSlice = createSlice({
         }
     },
     extraReducers: (builder) =>{
+        builder.addCase(checkUserToken.fulfilled, (state, action) => {
+            state.user = action.payload;
+        })
+        builder.addCase(checkUserToken.rejected, (state, action) => {
+            state.user = null;
+        })
+
         builder.addCase(signupUser.pending, (state, action) => {
             state.isLoading = true;
         })

@@ -8,9 +8,10 @@ function AddNotes() {
 
   const dispatch = useAppDispatch();
 
-  const addNote = () => {
+  const addNote = async () => {
     if (noteContent.trim() != "") {
-      dispatch(addNewNote({ content: noteContent }));
+      await dispatch(addNewNote({ content: noteContent, isUpdated: false}));
+      setNoteContent('');
     } else {
       alert("A note can't be empty.");
     }

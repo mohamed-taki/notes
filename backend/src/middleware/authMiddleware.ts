@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import userModel from "../models/userModel";
 import { User, UserToken } from "../utils/types";
+import expressAsyncHandler from "express-async-handler";
 
-export const checkForUserTokenExist = async (req:Request, res: Response, next:NextFunction) => {
+export const checkForUserTokenExist = expressAsyncHandler( async (req:Request, res: Response, next:NextFunction) => {
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         const token = req.headers.authorization.split(' ')[1]; 
 
@@ -11,7 +12,7 @@ export const checkForUserTokenExist = async (req:Request, res: Response, next:Ne
             await jwt.verify(token, process.env.JWT_SECRET, async (err, data)=> {
                 const userInfo = data as UserToken;
                 if(err){
-                    res.status(500);
+                    res.status(403);
                     throw new Error(err.message);
                 }else{
                     req.body.user = await userModel.findOne({username: userInfo.username}) ;
@@ -27,4 +28,4 @@ export const checkForUserTokenExist = async (req:Request, res: Response, next:Ne
         res.status(203);
         throw new Error("Authentication failed, No token provided!")
     }
-}
+})

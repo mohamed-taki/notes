@@ -15,3 +15,10 @@ export const addUserNote = async (noteData:Note, token:User['token']) => {
     const noteRes = await axios.post(API_URL, noteData, config);
     return noteRes.data
 }
+
+export const updateUserNote = async (note:Note, token:User['token']) => {
+    const config = setStdRequestConfig(token);
+    const noteRes = await axios.put(API_URL, note, config);
+
+    return noteRes.data;
+}
