@@ -41,7 +41,7 @@ export default function Signup() {
         className="d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }} >
         
-        <Card style={{width: "30%"}}>
+        <Card className="col-lg-4 col-md-6 col-8">
           <Card.Header>
             <h2>Signup</h2>
           </Card.Header>

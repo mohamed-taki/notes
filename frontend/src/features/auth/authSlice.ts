@@ -109,7 +109,6 @@ export const authSlice = createSlice({
         })
         builder.addCase(signupUser.rejected, (state, action) => {
             state.isError = true;
-            console.log(action);
             state.message = String(action.payload);
             // state.isSuccess = true;
         })

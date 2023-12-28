@@ -22,3 +22,9 @@ export const updateUserNote = async (note:Note, token:User['token']) => {
 
     return noteRes.data;
 }
+
+export const deleteNoteById = async (noteId : Note['_id'], token : User['token']) => {
+    const config = setStdRequestConfig(token);
+    const noteRes = await axios.delete(API_URL + `/${noteId}`, config);
+    return noteRes.data;
+}

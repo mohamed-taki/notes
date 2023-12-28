@@ -19,7 +19,7 @@ function AddNotes() {
 
   return (
     <Container className="d-flex justify-content-center my-2">
-      <Card className="col-4">
+      <Card className="col-lg-4 col-md-6 col-12">
         <Card.Body>
           <Stack direction="horizontal" gap={2}>
             <Form.Control

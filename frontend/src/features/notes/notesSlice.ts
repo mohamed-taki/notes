@@ -1,8 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ThunkAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Note, NotesInitialeState } from "../../helpers/types";
-import { AppThunk, RootState } from "../../app/store";
+import { RootState } from "../../app/store";
+
 import {
   addUserNote,
+  deleteNoteById,
   getCurrentUserNotes,
   updateUserNote,
 } from "./notesService";
@@ -37,8 +39,13 @@ export const updateNote = createAsyncThunk("notes/update", async (note: Note, th
   }
 );
 
-export const deleteNote = createAsyncThunk("notes/delete", async () => {
-
+export const deleteNote = createAsyncThunk("notes/delete", async (noteId:Note['_id'], thunkAPI) => {
+  const {auth} = thunkAPI.getState() as RootState;
+  try {
+    return await deleteNoteById(noteId, auth.user?.token); 
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
 });
 
 const initialState: NotesInitialeState = {
@@ -66,6 +73,10 @@ const notesSlice = createSlice({
           state.notes[i] = action.payload.note
         }
       }
+    });
+
+    builder.addCase(deleteNote.fulfilled, (state, action) => {
+      state.notes = state.notes.filter( note => note._id !== action.payload.note._id );
     });
   },
 });

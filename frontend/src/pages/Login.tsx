@@ -34,8 +34,8 @@ export default function Login() {
         className="d-flex justify-content-center align-items-center"
         style={{ height: "100vh" }}
       >
-        <Card className="w-25" style={{ height: "300px" }}>
-          <Card.Header>
+        <Card className="col-lg-4 col-md-6 col-8" style={{ height: "300px" }}>
+          <Card.Header> 
             <h2>Login</h2>
           </Card.Header>
 

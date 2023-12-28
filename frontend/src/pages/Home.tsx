@@ -16,19 +16,19 @@ function Home() {
   };
 
   useEffect(() => {
-    if (!authState.user) {
+    if (!authState.user || !localStorage.getItem('user')) {
       navigate("/login");
     }
   }, [authState, navigate, dispatch]);
   return (
     <div>
 
-      <Stack direction="horizontal" gap={2}>
-          <Button variant="danger" onClick={logout} className="">
-            Logout
-          </Button>
+      <Stack direction="horizontal">
 
           <Container>
+              <Button variant="danger" onClick={logout} className="align-self-start m-2">
+                Logout
+              </Button>
               <AddNotes />
               <NotesList />
           </Container>
